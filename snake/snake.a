@@ -1,49 +1,46 @@
-10 HOME
-20 LET L = 1               : REM SNAKE STARTS WITH LENGTH 1
-30 LET W = 40 : LET H = 24 : REM WIDTH AND HEIGHT
-40 GOSUB 2000              : REM INITIALIZE FOOD
-50 DIM X(100) : DIM Y(100) : REM INTIALIZE ARRAY
-55 VM = 1024
-60 X(L) = 20 : Y(L) = 12 
+10 print chr$(147)
+20 l = 1:w = 40:h = 24
+40 gosub 2000 : rem init food
+50 dim x(100) : dim y(100)
+55 vm = 1024 : rem vid memory start
+60 x(l) = 20 : y(l) = 12
 
-65 REM MAIN LOOP
-70 GOSUB 3000
-80 FOR N = 1 TO 1000 : NEXT N
-90 GOTO 70
+65 rem main loop
+70 gosub 3000
+80 for n = 1 to 1000 : next n
+90 goto 70
 
-999  REM READ KEYBOARD INPUT
-1000 LET K = PEEK(49152) : REM REPLACE WITH GET? NEED TO READ C64 KEYBOARD
-1010 IF K = 196 THEN X(L) = X(L) + 1
-1020 IF K = 193 THEN X(L) = X(L) - 1
-1030 IF K = 215 THEN Y(L) = Y(L) - 1
-1040 IF K = 211 THEN Y(L) = Y(L) + 1
+999 rem read keyboard input
+1000 get k$
+1010 if k$ = chr$(004) then x(l) = x(l) + 1
+1020 if k$ = chr$(001) then x(l) = x(l) - 1
+1030 if k$ = chr$(023) then y(l) = y(l) - 1
+1040 if k$ = chr$(019) then y(l) = y(l) + 1
 1050 RETURN
 
-1990 REM CREATE FOOD
-2000 LET FX = INT(RND(1) * W)
-2010 LET FY = INT(RND(1) * H)
-2020 POKE(VM+(40*FY)+FX),REM ADD PETSCII for F
-2030 REM DON'T NEED THIS PRINT "F"
-2040 RETURN
+1990 rem create food
+2000 let fx = int(rnd(1)*w)
+2010 let fy = int(rnd(1)*h)
+2020 poke vm+fx+40*fy,6
+2040 return
 
-2990 REM DISPLAY SNAKE
-3000 HTAB X(1) : VTAB Y(1)
-3010 PRINT " " 
-3020 IF L > 1 THEN GOSUB 5000
-3030 GOSUB 1000
-3040 IF X(L) = FX AND Y(L) = FY THEN GOSUB 4000
-3050 FOR I = 1 TO L
-3060 POKE(VM+(40*Y(I))+X(I)),REM ADD PETSCII FOR S
-3070 REM DON'T NEED THIS PRINT "S"
-3080 NEXT I
-3090 RETURN
+2990 rem display snake
+3000 poke vm+x(1)+40*y(1),32
+3020 if l > 1 then gosub 5000
+3030 gosub 1000
+3040 if x(l) = fx and y(l) = fy then gos
+ub 4000
+3050 for i = 1 to l
+3060 poke vm+x(i)+40*y(i),19
+3080 next i
+3090 return
 
-3990 REM GROW SNAKE
-4000 L = L + 1
-4010 X(L) = X(L - 1)
-4020 Y(L) = Y(L - 1)
-4030 GOSUB 2000
-4040 RETURN
+3990 rem grow snake
+4000 l = l+1
+4010 x(l) = x(l-1)
+4020 y(l) = y(l-1)
+4030 gosub 2000
+4040 return
 
 4990 REM SHIFT SNAKE ARRAY
 5000 FOR I = 1 TO L - 1
